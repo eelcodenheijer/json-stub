@@ -1,28 +1,28 @@
-# Power of Attorney Service
-This awesome web service provides REST API for accessing power of attorney information of a user
-  - Power of attorney details such as grantee, grantor and account details (/power-of-attorneys/{id})
-  - Details for card products authorized by the power of attorney (/debit-cards/{id} and /credit-cards/{id})
-  - Account details (/accounts/{id})
-  - Some developer might have made an error somewhere
+# Technical Assignment Eelco den Heijer
+## Setup
+You need Java 11 and Maven 3 to set it up. You can build the entire solution with the following command
 
-**To build and run:** use `mvn compile exec:java`
-**Application runs on:** http://localhost:8080
-**REST API documentation:** http://localhost:8080/swagger/
+`mvn clean install`
 
-# Exercise!
-  - Build a REST API presenting aggregated information from different services
-  - Only show data that a user is actually authorized for
-  - Handle any server errors you might run into gracefully
-  
-# Requirements
-  - Requirements of the code and functionality is up to the candidate
-  - We suggest using Java 11, Spring-Boot & Maven, but using Kotlin or Gradle is also fine
-  - Perform whatever validation seems necessary
-  - Don't return inactive products or accounts
-  - (Optional) Expose the API over HTTPS
- 
-# Tips
-  - Because every candidate has different experience and background, the candidate should decide on how complex code they want to show us
-  - If the assignment is unclear, do what you feel is best and focus on the code, not the exercise
-  - We look at the quality and readability of code that has been delivered more than if the functionality matches our expectations
-  - Impress us!
+If you want to run the solution, first start the 'backend mock services' with
+
+`mvn exec:java`
+
+and then start the integrated web service with the following command
+
+`mvn spring-boot:run`
+
+I implemented two endpoints that integrates the data from all mock services. The endpoints are:
+
+[https://localhost:8443/enriched-attorneys/0001](https://localhost:8443/enriched-attorneys/0001)
+
+For a single full attorney (in this case, with ID '0001') and
+
+[https://localhost:8443/enriched-attorneys](https://localhost:8443/enriched-attorneys)
+
+for all attorneys.
+
+# Solution
+I built the entire solution in Kotlin, since that was allowed, and I think Kotlin is more compact than Java (and thus I am slightly faster in Kotlin than in Java). Furthermore, Kotlin is a JVM language, so I mostly used existing Java libraries. I used Spring Boot for the REST services and Jackson for JSON to Object mapping (although most is done by Spring REST template). I configured Spring Boot to use SSL, I used a self-signed certificate that is more or less refused by Chrome, but it works in Firefox (after you accept the fact that it's a self-signed certificate).
+
+I disregarded the automated tests; normally I wouldn't do that, I usually strive for 90 to 95% test coverage, but since this is not intended to be production code, I omitted it. Implementing unit tests would have been easy to do, but would have been rather time-consuming.
